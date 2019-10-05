@@ -83,3 +83,6 @@ class graph(dict):
         E = ", ".join(map(str, self.E))
         A = ", ".join(map(str, self.A))
         return f"(V: {{{V}}}, A: {{{A}}})" if self._directed else f"(V: {{{V}}}, E: {{{E}}})"
+
+def not_visited(visited, iter):
+  return (v for v in iter if v not in visited)

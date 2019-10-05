@@ -1,2 +1,2 @@
-from algorithms.dfs import *
-from algorithms.bfs import *
+from algorithms.search import *
+from algorithms.pathfinding import *

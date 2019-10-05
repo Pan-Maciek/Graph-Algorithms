@@ -1,5 +1,4 @@
-from graph import graph
-from algorithms.util import not_visited
+from graph import graph, not_visited
 
 def bfs(G: graph, s):
     visited, queue = set(), [s]
