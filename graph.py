@@ -25,7 +25,20 @@ class arch(tuple):
     def __str__(self):
         return f"({self[0]}, {self[1]})"
 
-class graph(object):
+class path(tuple):
+
+    def __eq__(self, other):
+        for u, v in zip(self, other):
+            if u != v: 
+                return False
+        return True
+
+    def __hash__(self):
+        return tuple.__hash__(self)
+    
+    def __str__(self):
+        return "(" + " -> ".join(self) + ")"
+class graph(dict):
 
     def __init__(self, V={}, A={}, E={}, **kwargs):
         self.V = V
@@ -33,23 +46,26 @@ class graph(object):
         self.A = {arch(u, v) for u, v in A}
         self.E = {edge(u, v) for u, v in E}
 
-        self._graph = dict((v, set()) for v in V)
+        for v in V:
+            self[v] = set()
+            super(graph, self).__setitem__(v, set())
+
         for key in V:
-            s = self._graph[key]
+            s = self[key]
             for u, v in A:
                 if key == u:
                     s.add(v)
             for u, v in E:
                 if key == u:
                     s.add(v)
-                    self._graph[v].add(key)
+                    self[v].add(key)
                 elif key == v:
                     s.add(u)
-                    self._graph[u].add(key)
+                    self[u].add(key)
 
 
     def neighbors_of(self, s):
-        for key in self._graph[s]:
+        for key in self[s]:
             yield key
 
     def edges_of(self, s):
@@ -67,4 +83,3 @@ class graph(object):
         E = ", ".join(map(str, self.E))
         A = ", ".join(map(str, self.A))
         return f"(V: {{{V}}}, A: {{{A}}})" if self._directed else f"(V: {{{V}}}, E: {{{E}}})"
-
