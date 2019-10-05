@@ -71,7 +71,7 @@ class graph(dict):
     def edges_of(self, s):
         return (e for e in self.E if s in e)
 
-    def arches_of(self, s):
+    def arcs_of(self, s):
         return (a for a in self.A if a[0] == s)
 
     def __iter__(self):
