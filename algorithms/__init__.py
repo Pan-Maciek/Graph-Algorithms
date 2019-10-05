@@ -1,2 +1,2 @@
-from algorithms.search import *
+from algorithms.traversal import *
 from algorithms.pathfinding import *
