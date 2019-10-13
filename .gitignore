@@ -1,6 +1,7 @@
 .vs
 .vscode
 .ionide
+.wolf*.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
