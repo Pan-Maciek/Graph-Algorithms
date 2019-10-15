@@ -39,4 +39,4 @@ class numeric_graph(object):
 
 
 def weight(edge):
-    return list(edge)[-1]
+    return edge[-1]

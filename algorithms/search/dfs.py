@@ -14,6 +14,6 @@ def dfs(graph, source, target, condition=None):
             visited[u] = True
             if u == target:
                 break
-            stack.extend(v[0] for v in filter(condition, graph.edges(u)) if not visited[v[0]])
+            stack.extend(edge[0] for edge in graph.edges(u) if not visited[edge[0]] and condition(edge))
 
     return visited[target]
