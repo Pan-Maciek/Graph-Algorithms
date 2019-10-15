@@ -21,8 +21,10 @@ def test(data=None, loader=None, times=10):
             time = timeit(run, number=times)
             result[file] = { "time": time, "passed": res[0] == solution }
             passed = '✔' if res[0] == solution else '❌'
-            time = str(round(time, 5)).rjust(10)
+            time = str(round(time / times, 5)).rjust(10)
             print(f" {passed} ⌚ {time}")
+            if res[0] != solution:
+                print('solution:', solution, 'result:', res[0])
         return result
     return wrap
 

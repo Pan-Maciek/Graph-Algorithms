@@ -7,13 +7,13 @@ def dfs(graph, source, target, condition=None):
             visited[u] = True
             if u == target:
                 break
-            stack.extend(v for v in graph.neighbors(u) if not visited[u])
+            stack.extend(v for v in graph.neighbors(u) if not visited[v])
     else:
         while stack:
             u = stack.pop()
             visited[u] = True
             if u == target:
                 break
-            stack.extend(edge[0] for edge in graph.edges(u) if not visited[edge[0]] and condition(edge))
+            stack.extend(v for v, w in graph.edges(u) if not visited[v] and condition((u, v, w)))
 
     return visited[target]
