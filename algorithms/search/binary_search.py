@@ -9,13 +9,15 @@ __sorted = sorted  # Used because of argument name
 
 def binary_search(min, max, selector):
     """
-    Used for values from continuous range (min, max)
+    Used for values from "continuous" range of integers from [min, max]  
+    Time complexity of this function depends on range [min, max] range.  
+    O(logn) where n = max - min  
     """
     L, R = min, max
     selected = None
 
     while L <= R:
-        m = (L + R) / 2
+        m = (L + R) // 2
         action = selector(m)
         if action == NotFound: return NotFound
         elif action == Found: return m
@@ -32,9 +34,16 @@ def binary_search(min, max, selector):
 
 def discrete_binary_search(iterable, selector, sorted=False):
     """
-    Used for discrete values from set.
+    Used for discrete values from given set.  
+    O(n+nlogn+logn) if sorted=False  
+    O(n+logn) if sorted=True  
+    O(logn) if sorted=True and iterable is list  
     """
-    iterable = list(iterable) if sorted else list(__sorted(iterable))
+    if isinstance(iterable, list):
+        iterable = iterable if sorted else list(__sorted(iterable))
+    else:
+        iterable = list(iterable) if sorted else list(__sorted(iterable))
+
     L, R = 0, len(iterable) - 1
     selected = None
 
