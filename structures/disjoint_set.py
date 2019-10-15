@@ -6,15 +6,15 @@ class numeric_disjoint_set(object):
             self.parent = parent
             self.rank = 0
 
-    def __init__(self, size):
+    def __init__(self, size): # O(n)
         self._data = [numeric_disjoint_set.subset(i) for i in range(size)]
 
-    def find(self, u):
+    def find(self, u): # O(logn)
         if u != self._data[u].parent:
             self._data[u].parent = self.find(self._data[u].parent)
         return self._data[u].parent
 
-    def union(self, u, v):
+    def union(self, u, v): # O(logn)
         u_rep, v_rep = self.find(u), self.find(v)
         u_rank, v_rank = self._data[u_rep].rank, self._data[v_rep].rank
 
@@ -31,12 +31,12 @@ class numeric_disjoint_set(object):
 
 
 class disjoint_set(object):
-    def __init__(self, iterable):
+    def __init__(self, iterable): # O(n)
         self._dict = dict(zip(iterable, count()))
         self._numeric = numeric_disjoint_set(len(self._dict))
 
-    def find(self, u):
+    def find(self, u): # O(logn)
         return self._numeric.find(self._dict[u])
 
-    def union(self, u, v):
+    def union(self, u, v): # O(logn)
         return self._numeric.union(self._dict[u], self._dict[v])

@@ -1,4 +1,9 @@
 def dfs(graph, source, target, condition=None):
+    """
+    Depth first search with optional condition while selecting edges.
+    O(|V|+|E|) when condition=None
+    O(|V|+|E| * c) where c is time complexity of condition
+    """
     visited, stack = [False] * (graph.V), [source]
 
     if condition == None:

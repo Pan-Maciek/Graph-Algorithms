@@ -11,7 +11,7 @@ def binary_search(min, max, selector):
     """
     Used for values from "continuous" range of integers from [min, max]  
     Time complexity of this function depends on range [min, max] range.  
-    O(logn) where n = max - min  
+    O(slogn) where n = max - min and s is time complexity of selector
     """
     L, R = min, max
     selected = None
@@ -35,9 +35,10 @@ def binary_search(min, max, selector):
 def discrete_binary_search(iterable, selector, sorted=False):
     """
     Used for discrete values from given set.  
-    O(n+nlogn+logn) if sorted=False  
-    O(n+logn) if sorted=True  
-    O(logn) if sorted=True and iterable is list  
+    Generally O((s+n)logn) where s is time complexity of selector
+    O(n+nlogn+slogn) if sorted=False  
+    O(n+slogn) if sorted=True  
+    O(slogn) if sorted=True and iterable is list  
     """
     if isinstance(iterable, list):
         iterable = iterable if sorted else list(__sorted(iterable))
