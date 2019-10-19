@@ -1,11 +1,14 @@
-from structures.graph import numeric_graph
-import os
+import os 
 import re
 import sys
 from timeit import timeit
 
+project_root = os.path.abspath(os.path.join(__file__, '../..'))
+sys.path.append(project_root)
 
+from structures.graph import numeric_graph
 def test(data=None, loader=None, times=10):
+    data = data if os.path.exists(data) else os.path.join(project_root, data)
     files = os.listdir(data)
     pairs = ((file, os.path.getsize(f"{data}/{file}")) for file in files)
     padd = max(map(len, files))

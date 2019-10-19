@@ -1,14 +1,15 @@
+from test_utils import test, load_graph
+
 from structures.graph import weight
 from algorithms.search.binary_search import SelectAndMore, Less, binary_search
 from algorithms.search.bfs import bfs
 from algorithms.numeric.min_max import min_max
-from test_utils import test, load_graph
 
-# Finding max flow using binary search
+# Finding path with max flow using binary search
 
 s, t = 1, 2
 
-@test(data="./data", loader=load_graph)
+@test(data="./data/lab1", loader=load_graph)
 def run(G):
   def find_max_flow(flow):
       return SelectAndMore(flow) if bfs(G, s, t, condition=lambda edge: weight(edge) >= flow) else Less
