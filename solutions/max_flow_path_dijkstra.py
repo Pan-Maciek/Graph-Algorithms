@@ -1,7 +1,7 @@
 from test_utils import test, load_graph
 from algorithms.paths.dijkstra import dijkstra, high_priority, inf, Relax, SkipRelaxation
 
-# Finding path with max flow using disjoint sets
+# Finding path with max flow using modified Dijkstra's algorithm
 
 def relax(u, v, w):
     flow = min(u, w)
