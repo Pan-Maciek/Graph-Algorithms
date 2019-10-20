@@ -75,4 +75,4 @@ def weight(edge):
     return edge[-1]
 
 def min_weight(min_weight, strong=False):
-    return lambda edge: weight(edge) > min_weight if strong else lambda edge: weight(edge) >= min_weight
+    return (lambda edge: weight(edge) > min_weight) if strong else (lambda edge: weight(edge) >= min_weight)
