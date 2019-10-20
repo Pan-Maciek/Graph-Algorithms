@@ -43,25 +43,33 @@ class residual_graph(object):
         self.V = base_graph.V
         self._directed = base_graph._directed
         self.weight = list([None for _ in range(base_graph.V)] for _ in range(base_graph.V))
+        self._data = list([] for _ in range(base_graph.V))
         if base_graph._directed:
             for u, v, w in base_graph.E:
                 self.weight[u][v] = w
+                self._data[u].append(v)
         else:
             for u, v, w in base_graph.E:
                 self.weight[u][v] = w
                 self.weight[v][u] = w
+                self._data[u].append(v)
+                self._data[v].append(u)
     
     def edges(self, u):
-        return ((v, w) for v, w in enumerate(self.weight[u]) if w != None)
+        return ((v, self.weight[u][v]) for v in self._data[u])
     
     def neighbors(self, u):
-        return (v for v in range(self.V) if self.weight[v] != None)
+        return iter(self._data[u])
 
     def inc_weight(self, u, v, delta):
-        self.weight[u][v] = self.weight[u][v] + delta if self.weight[u][v] != None else delta
+        if self.weight[u][v] == None:
+            self.weight[u][v] = delta
+            self._data[u].append(v)
+        else:
+            self.weight[u][v] = self.weight[u][v] + delta
 
     def dec_weight(self, u, v, delta):
-        self.weight[u][v] = self.weight[u][v] - delta if self.weight[u][v] != None else -delta
+        self.inc_weight(u, v, -delta)
 
 def weight(edge):
     return edge[-1]
