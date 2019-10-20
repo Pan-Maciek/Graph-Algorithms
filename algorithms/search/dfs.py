@@ -1,24 +1,4 @@
+from algorithms.traversal.dfs import dfs as dfs_traversal
+
 def dfs(graph, source, target, condition=None):
-    """
-    Depth first search with optional condition while selecting edges.
-    O(|V|+|E|) when condition=None
-    O(|V|+|E| * c) where c is time complexity of condition
-    """
-    visited, stack = [False] * (graph.V), [source]
-
-    if condition == None:
-        while stack:
-            u = stack.pop()
-            visited[u] = True
-            if u == target:
-                break
-            stack.extend(v for v in graph.neighbors(u) if not visited[v])
-    else:
-        while stack:
-            u = stack.pop()
-            visited[u] = True
-            if u == target:
-                break
-            stack.extend(v for v, w in graph.edges(u) if not visited[v] and condition((u, v, w)))
-
-    return visited[target]
+    return dfs_traversal(graph, source, target, condition=condition)[target]
