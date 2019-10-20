@@ -32,14 +32,14 @@ def dijkstra(graph, source, initial_distance=inf, source_distance=0, relax=defau
                     process((u, v, w), val)
     return distance
 
-def dijkstra_paths(graph, source, initial_distance=inf, source_distance=0, relax=default_relax, priority=low_priority):
+def dijkstra_paths(graph, source, initial_distance=inf, source_distance=0, relax=default_relax, priority=low_priority, path_accumulator=None, initial_acc_state=0):
     previous = [None] * graph.V
     def update_previous(edge, _):
-        u, v, _ = edge
-        previous[v] = u
+        u, v, w = edge
+        previous[v] = (u, w)
     dijkstra(graph, source, initial_distance=initial_distance, source_distance=source_distance, relax=default_relax, priority=priority, process=update_previous)
 
     def path_to(target):
-        return path.from_previous_list(previous, target)
+        return path.from_previous_list(previous, target, accumulator=path_accumulator, initial_acc_state=initial_acc_state)
 
     return path_to
