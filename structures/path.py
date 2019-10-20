@@ -6,7 +6,7 @@ class path(tuple):
         self.accumulated = accumulated
 
     def __str__(self):
-        return ('(' if self.accumulated == None else '(acc: ' + str(self.accumulated) + '; ') + ' -> '.join(map(str, self)) + ')' 
+        return ('(' if self.accumulated == None else '(acc: ' + str(self.accumulated) + '; ') + ' -> '.join(map(lambda x: str(x[0]), self)) + ')' 
 
     def __iter__(self):
         iterable = tuple.__iter__(self) 
@@ -21,6 +21,7 @@ class path(tuple):
         state = initial_acc_state
         if previous[index] == None:
             return None
+        reversed_path.append(index)
         if accumulator == None:
             while previous[index] != None:
                 reversed_path.append(index)
@@ -33,3 +34,9 @@ class path(tuple):
                 state = accumulator(state, w)
             reversed_path.append(index)
         return path(reversed(reversed_path), accumulated = None if accumulator == None else state)
+
+def sum_along_path(a, b):
+    return a + b
+
+def min_along_path(a, b):
+    return a if a < b else b

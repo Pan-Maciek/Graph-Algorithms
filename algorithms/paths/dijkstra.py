@@ -6,8 +6,8 @@ def Relax(val):
     return val
 SkipRelaxation = None
 
-def default_relax(old, v, w):
-    return min(old, v + w)
+def default_relax(u, v, w):
+    return min(v, u + w)
 
 def dijkstra(graph, source, initial_distance=inf, source_distance=0, relax=default_relax, priority=low_priority, process=None):
 
@@ -41,7 +41,8 @@ def dijkstra_paths(graph, source, initial_distance=inf, source_distance=0, relax
 
     def path_to(target):
         p = path.from_previous_list(previous, target)
-        p.accumulated = distance[target]
+        if p != None:
+            p.accumulated = distance[target]
         return p
 
     return path_to
