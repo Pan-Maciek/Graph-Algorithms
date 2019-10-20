@@ -11,20 +11,20 @@ def test(data=None, loader=None, times=10):
     data = data if os.path.exists(data) else os.path.join(project_root, data)
     if os.path.isfile(data):
         files = [data]
-        pairs = [(data, 0)]
+        pairs = [(os.path.basename(data), data, 0)]
     else:
         files = os.listdir(data) 
-        pairs = ((f"{data}/{file}", os.path.getsize(f"{data}/{file}")) for file in files)
+        pairs = ((file, f"{data}/{file}", os.path.getsize(f"{data}/{file}")) for file in files)
     padd = max(map(len, files))
 
     def wrap(function):
         result = dict()
-        for file, _ in sorted(pairs, key=lambda x: x[1]):
+        for file_name, file, _ in sorted(pairs, key=lambda x: x[2]):
             solution, args = loader(file)
             res = []
             def run():
                 res.append(function(*args))
-            sys.stdout.write(file.rjust(padd))
+            sys.stdout.write(file_name.rjust(padd))
             time = timeit(run, number=times)
             result[file] = { "time": time, "passed": res[0] == solution }
             passed = '✔' if res[0] == solution else '❌'
