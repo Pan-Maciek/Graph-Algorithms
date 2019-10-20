@@ -9,14 +9,18 @@ sys.path.append(project_root)
 from structures.graph import numeric_graph
 def test(data=None, loader=None, times=10):
     data = data if os.path.exists(data) else os.path.join(project_root, data)
-    files = os.listdir(data)
-    pairs = ((file, os.path.getsize(f"{data}/{file}")) for file in files)
+    if os.path.isfile(data):
+        files = [data]
+        pairs = [(data, 0)]
+    else:
+        files = os.listdir(data) 
+        pairs = ((f"{data}/{file}", os.path.getsize(f"{data}/{file}")) for file in files)
     padd = max(map(len, files))
 
     def wrap(function):
         result = dict()
         for file, _ in sorted(pairs, key=lambda x: x[1]):
-            solution, args = loader(f"{data}/{file}")
+            solution, args = loader(file)
             res = []
             def run():
                 res.append(function(*args))
@@ -32,7 +36,7 @@ def test(data=None, loader=None, times=10):
     return wrap
 
 
-def load_graph(file):
+def load_graph(file, directed=False):
     V, L = 0, []
     solution = None
     with open(file, 'r') as f:
@@ -48,4 +52,7 @@ def load_graph(file):
                 (x, y, c) = (int(s[1]), int(s[2]), int(s[3]))
                 # (x, y) = (min(a, b), max(a, b))
                 L.append((x, y, c))
-    return solution, [numeric_graph(V, L, directed=False)]
+    return solution, [numeric_graph(V, L, directed=directed)]
+
+def load_directed_graph(file):
+    return load_graph(file, directed=True)
