@@ -18,9 +18,9 @@ def heapify(array, i, N, cmp=high_priority, swap=swap):
             i = S
         else: break
 
-def build_heap(array, i, N, cmp=high_priority):
+def build_heap(array, N, cmp=high_priority, swap=swap):
     for i in range(N // 2, -1, -1):
-        heapify(array, i, N, cmp=cmp)
+        heapify(array, i, N, cmp=cmp, swap=swap)
 
 def sift_up(array, i, cmp=high_priority, swap=swap):
     while i > 0 and cmp(array[i], array[(i - 1) // 2]):
@@ -86,7 +86,10 @@ class priority_queue(object):
 
     def extend(self, iter):
         for key, priority in iter:
-            self.push(key, priority)
+            self._keys[self.size] = key
+            self._info[key] = priority_queue.priority_info(priority, self.size)
+            self.size += 1
+        build_heap(self._keys, self.size, cmp=self._priority, swap=self._swap)
 
     def mutable_iter(self):
         while self.size != 0:
