@@ -1,7 +1,7 @@
 from collections import deque
 
 def bfs(graph, source, target, condition=None, process=None):
-    visited, queue = [False] * graph.V, deque(maxlen=graph.V)
+    visited, queue = [False] * graph.V, deque()
     queue.append(source)
 
     while queue:

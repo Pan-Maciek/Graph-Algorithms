@@ -1,7 +1,7 @@
 from collections import deque
 
 def dfs(graph, source, target, condition=None, process=None):
-    visited, stack = [False] * graph.V, deque([source], maxlen=graph.V)
+    visited, stack = [False] * graph.V, deque()
     stack.append(source)
 
     while stack:
