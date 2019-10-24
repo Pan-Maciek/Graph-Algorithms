@@ -1,8 +1,11 @@
+from collections import deque
+
 def bfs(graph, source, target, condition=None, process=None):
-    visited, queue = [False] * graph.V, [source]
+    visited, queue = [False] * graph.V, deque(maxlen=graph.V)
+    queue.append(source)
 
     while queue:
-        u = queue.pop(0)
+        u = queue.popleft()
         if visited[u]:
             continue
         visited[u] = True
