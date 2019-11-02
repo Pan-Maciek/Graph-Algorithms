@@ -19,11 +19,11 @@ def binary_search(min, max, selector):
         elif action == More: L = m + 1
         elif action == Less: R = m - 1
         elif action[0] == More:
-          selected = action[1]
-          L = m + 1
+            selected = action[1]
+            L = m + 1
         elif action[0] == Less:
-          selected = action[1]
-          R = m - 1
+            selected = action[1]
+            R = m - 1
 
     return selected
 

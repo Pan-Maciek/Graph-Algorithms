@@ -1,5 +1,5 @@
 from test_utils import test, load_graph
-from structures.graph import numeric_graph, weight
+from structures.graph import weight
 from structures.disjoint_set import numeric_disjoint_set
 
 # Finding path with max flow using disjoint sets
@@ -7,12 +7,12 @@ from structures.disjoint_set import numeric_disjoint_set
 s, t = 1, 2
 @test(data='./data/lab1', loader=load_graph)
 def run(G):
-    S = numeric_disjoint_set(G.V) # O(|V|)
+    S = numeric_disjoint_set(G.V)
     max_flow = None
-    for u, v, w in sorted(G.E, key=weight, reverse=True): # O(|E|log|E|)
-        S.union(u, v) # O(log|V|)
+    for u, v, w in sorted(G.E, key=weight, reverse=True): 
+        S.union(u, v) 
 
-        if S.find(s) == S.find(t): # O(2log|V|)
+        if S.find(s) == S.find(t): 
             max_flow = w
             break
     return max_flow

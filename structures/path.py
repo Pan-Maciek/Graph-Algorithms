@@ -1,3 +1,5 @@
+from collections import deque
+
 class path(tuple):
     def __new__(self, iter, accumulated=None):
         return tuple.__new__(path, iter)
@@ -19,22 +21,22 @@ class path(tuple):
 
     @staticmethod
     def from_previous_list(previous, index, accumulator=None, initial_acc_state=0):
-        reversed_path = []
+        _path = deque()
         state = initial_acc_state
         if previous[index] == None:
             return None
         if accumulator == None:
             while previous[index] != None:
-                reversed_path.append(index)
-                index, _ = previous[index]
-            reversed_path.append(index)
+                _path.appendleft(index)
+                index, _, _ = previous[index]
+            _path.appendleft(index)
         else:
             while previous[index] != None:
-                reversed_path.append(index)
-                index, w = previous[index]
+                _path.appendleft(index)
+                index, _, w = previous[index]
                 state = accumulator(state, w)
-            reversed_path.append(index)
-        return path(reversed(reversed_path), accumulated = None if accumulator == None else state)
+            _path.append(index)
+        return path(_path, accumulated = None if accumulator == None else state)
 
 def sum_along_path(a, b):
     return a + b

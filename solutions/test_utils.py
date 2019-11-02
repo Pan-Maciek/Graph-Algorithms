@@ -6,7 +6,7 @@ from timeit import timeit
 project_root = os.path.abspath(os.path.join(__file__, '../..'))
 sys.path.append(project_root)
 
-from structures.graph import numeric_graph
+from structures.graph import graph
 def test(data=None, loader=None, times=10):
     data = data if os.path.exists(data) else os.path.join(project_root, data)
     if os.path.isfile(data):
@@ -52,7 +52,7 @@ def load_graph(file, directed=False):
                 (x, y, c) = (int(s[1]), int(s[2]), int(s[3]))
                 # (x, y) = (min(a, b), max(a, b))
                 L.append((x, y, c))
-    return solution, [numeric_graph(V, L, directed=directed)]
+    return solution, [graph(V, L, directed=directed)]
 
 def load_directed_graph(file):
     return load_graph(file, directed=True)

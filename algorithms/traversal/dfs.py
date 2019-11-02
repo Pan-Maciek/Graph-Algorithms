@@ -10,16 +10,17 @@ def dfs(graph, source, target, condition=None, process=None):
         if u == target:
             break
         if condition != None:
-            for v, w in graph.edges(u):
-                edge = (u, v, w)
+            for edge in graph.edges(u):
+                u, v, _ = edge
                 if not visited[v] and condition(edge):
                     if process != None:
                         process(edge)
                     stack.append(v)
         else:
-            for v, w in graph.edges(u):
+            for edge in graph.edges(u):
+                u, v, _ = edge
                 if not visited[v]:
                     if process != None:
-                        process((u, v, w))
+                        process(edge)
                     stack.append(v)
     return visited

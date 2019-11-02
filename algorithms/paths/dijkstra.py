@@ -21,7 +21,8 @@ def dijkstra(graph, source, initial_distance=inf, source_distance=0, relax=defau
 
     for u, dist in pq.mutable_iter():
         processed[u] = True
-        for v, w in graph.edges(u):
+        for edge in graph.edges(u):
+            _, v, w = edge
             if processed[v]:
                 continue                
             val = relax(dist, distance[v], w)
@@ -29,14 +30,14 @@ def dijkstra(graph, source, initial_distance=inf, source_distance=0, relax=defau
                 distance[v] = val
                 pq.change_priority(v, val)
                 if process != None:
-                    process((u, v, w), val)
+                    process(edge, val)
     return distance
 
 def dijkstra_paths(graph, source, initial_distance=inf, source_distance=0, relax=default_relax, priority=low_priority):
     previous = [None] * graph.V
     def update_previous(edge, _):
-        u, v, w = edge
-        previous[v] = (u, w)
+        _, v, _ = edge
+        previous[v] = edge
     distance = dijkstra(graph, source, initial_distance=initial_distance, source_distance=source_distance, relax=relax, priority=priority, process=update_previous)
 
     def path_to(target):
