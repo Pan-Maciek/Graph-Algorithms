@@ -1,4 +1,5 @@
 from copy import copy
+from itertools import chain
 
 class graph(object):
     def __init__(self, V, E, directed=True):
@@ -23,6 +24,7 @@ class residual_graph(object):
         self.V = V = base_graph.V
 
         self._vert_info = [[] for _ in range(V)]
+        self._extra_vert_info = [[] for _ in range(V)]
         self._edge_info = [[None for _ in range(V)] for _ in range(V)]
         self._directed = base_graph._directed
 
@@ -38,23 +40,26 @@ class residual_graph(object):
                 self._vert_info[v].append(u)
     
     def edges(self, u):
-        return (self._edge_info[u][v] for v in self._vert_info[u])
+        return (self._edge_info[u][v] for v in chain(self._vert_info[u], self._extra_vert_info[u]))
     
     def edge(self, u, v, default_info=None):
         if self._edge_info[u][v] == None:
             if default_info == None:
                 return None
-            self._vert_info[u].append(v)
+            self._extra_vert_info[u].append(v)
             self._edge_info[u][v] = (u, v, default_info)
         return self._edge_info[u][v][2]
 
     def neighbors(self, u):
-        return iter(self._vert_info[u])
+        return chain(self._vert_info[u], self._extra_vert_info[u])
 
-    def update_edge(self, u, v, w):
-        if self._vert_info[u][v] == None:
-            self._vert_info[u].append(v)
-        self._edge_info[u][v] = (u, v, w)
+    def clear(self, reset):
+        for u in range(self.V):
+            for v in self._vert_info[u]:
+                reset(self._edge_info[u][v][2])
+            for v in self._extra_vert_info[u]:
+                self._edge_info[u][v] = None
+            self._extra_vert_info[u].clear()
 
 def weight(edge):
     return edge[-1]
@@ -70,3 +75,7 @@ class flow_edge(object):
     @staticmethod
     def not_saturated(edge):
         return edge[2].capacity > edge[2].flow
+
+    @staticmethod
+    def reset_flow(edge):
+        edge.flow = 0
