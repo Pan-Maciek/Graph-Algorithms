@@ -58,8 +58,11 @@ def load_graph(file, directed=False, transform=None):
 def load_directed_graph(file):
     return load_graph(file, directed=True)
 
-def load_directed_flow_graph(file):
+def load_flow_graph(file, directed=False):
     def transform(edge):
         u, v, w = edge
         return (u, v, flow_edge(w))
-    return load_graph(file, directed=True, transform=transform)
+    return load_graph(file, directed=directed, transform=transform)
+
+def load_directed_flow_graph(file):
+    return load_flow_graph(file, directed=True)
