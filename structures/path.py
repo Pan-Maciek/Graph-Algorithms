@@ -35,7 +35,7 @@ class path(tuple):
                 _path.appendleft(index)
                 index, _, w = previous[index]
                 state = accumulator(state, w)
-            _path.append(index)
+            _path.appendleft(index)
         return path(_path, accumulated = None if accumulator == None else state)
 
 def sum_along_path(a, b):
@@ -43,3 +43,6 @@ def sum_along_path(a, b):
 
 def min_along_path(a, b):
     return a if a < b else b
+
+def min_bandwidth(old, w):
+    return min(old, w.capacity - w.flow)

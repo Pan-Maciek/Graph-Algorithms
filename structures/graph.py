@@ -5,6 +5,7 @@ class graph(object):
         self.V = V
         self._vert_info = [[] for _ in range(V)]
         self.E = E
+        self._directed = directed
         for edge in E:
             u, v, w  = edge
             self._vert_info[u].append(edge)
@@ -19,39 +20,53 @@ class graph(object):
 
 class residual_graph(object):
     def __init__(self, base_graph):
-        self.V = base_graph.V
+        self.V = V = base_graph.V
+
+        self._vert_info = [[] for _ in range(V)]
+        self._edge_info = [[None for _ in range(V)] for _ in range(V)]
         self._directed = base_graph._directed
-        self.weight = list([None for _ in range(base_graph.V)] for _ in range(base_graph.V))
-        self._data = list([] for _ in range(base_graph.V))
+
         if base_graph._directed:
             for u, v, w in base_graph.E:
-                self.weight[u][v] = w
-                self._data[u].append(v)
+                self._edge_info[u][v] = (u, v, w)
+                self._vert_info[u].append(v)
         else:
             for u, v, w in base_graph.E:
-                self.weight[u][v] = w
-                self.weight[v][u] = w
-                self._data[u].append(v)
-                self._data[v].append(u)
+                self._edge_info[u][v] = (u, v, w)
+                self._edge_info[v][u] = (v, u, copy(w))
+                self._vert_info[u].append(v)
+                self._vert_info[v].append(u)
     
     def edges(self, u):
-        return ((v, self.weight[u][v]) for v in self._data[u])
+        return (self._edge_info[u][v] for v in self._vert_info[u])
     
+    def edge(self, u, v, default_info=None):
+        if self._edge_info[u][v] == None:
+            if default_info == None:
+                return None
+            self._vert_info[u].append(v)
+            self._edge_info[u][v] = (u, v, default_info)
+        return self._edge_info[u][v][2]
+
     def neighbors(self, u):
-        return iter(self._data[u])
+        return iter(self._vert_info[u])
 
-    def inc_weight(self, u, v, delta):
-        if self.weight[u][v] == None:
-            self.weight[u][v] = delta
-            self._data[u].append(v)
-        else:
-            self.weight[u][v] = self.weight[u][v] + delta
-
-    def dec_weight(self, u, v, delta):
-        self.inc_weight(u, v, -delta)
+    def update_edge(self, u, v, w):
+        if self._vert_info[u][v] == None:
+            self._vert_info[u].append(v)
+        self._edge_info[u][v] = (u, v, w)
 
 def weight(edge):
     return edge[-1]
 
 def min_weight(min_weight, strong=False):
     return (lambda edge: weight(edge) > min_weight) if strong else (lambda edge: weight(edge) >= min_weight)
+
+class flow_edge(object):
+    def __init__(self, w):
+        self.flow = 0
+        self.capacity = w
+
+    @staticmethod
+    def not_saturated(edge):
+        return edge[2].capacity > edge[2].flow
