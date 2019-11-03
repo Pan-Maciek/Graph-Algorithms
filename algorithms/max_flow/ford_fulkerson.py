@@ -13,7 +13,7 @@ def max_flow(graph, source, sink, find_path=dfs_path):
             break
         for u, v in path:
             rg.edge(u, v).flow += path.accumulated
-            rg.edge(v, u, flow_edge(0)).capacity += path.accumulated
+            rg.edge(v, u, flow_edge(0)).flow -= path.accumulated
         flow += path.accumulated
 
     return flow
