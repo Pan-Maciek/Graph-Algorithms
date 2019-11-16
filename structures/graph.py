@@ -20,8 +20,12 @@ class graph(object):
         return (v for _, v, _ in self._vert_info[u])
 
 class residual_graph(object):
-    def __init__(self, base_graph):
+    def __init__(self, base_graph, edge_cp=None):
         self.V = V = base_graph.V
+        if not edge_cp and isinstance(base_graph.E[0][2], flow_edge):
+            def cp(edge):
+                return flow_edge(edge.capacity)
+            edge_cp = cp
 
         self._vert_info = [[] for _ in range(V)]
         self._edge_info = [[None for _ in range(V)] for _ in range(V)]
@@ -29,12 +33,12 @@ class residual_graph(object):
 
         if base_graph._directed:
             for u, v, w in base_graph.E:
-                self._edge_info[u][v] = (u, v, w)
+                self._edge_info[u][v] = (u, v, edge_cp(w) if edge_cp else w)
                 self._vert_info[u].append(v)
         else:
             for u, v, w in base_graph.E:
-                self._edge_info[u][v] = (u, v, w)
-                self._edge_info[v][u] = (v, u, copy(w))
+                self._edge_info[u][v] = (u, v, edge_cp(w) if edge_cp else w)
+                self._edge_info[v][u] = (v, u, edge_cp(w) if edge_cp else w)
                 self._vert_info[u].append(v)
                 self._vert_info[v].append(u)
     
